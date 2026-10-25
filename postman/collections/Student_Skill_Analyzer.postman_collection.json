@@ -1,0 +1,790 @@
+{
+  "info": {
+    "_postman_id": "student-skill-analyzer-full-v1",
+    "name": "Student Skill Analyzer API",
+    "description": "Complete Postman API Collection for Student Skill Analyzer Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health & Server",
+      "item": [
+        {
+          "name": "API Welcome Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Authentication",
+      "item": [
+        {
+          "name": "Register Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ali Khan\",\n  \"email\": \"ali.khan@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"student\",\n  \"department\": \"Computer Science\",\n  \"major\": \"Software Engineering\",\n  \"currentSemester\": 6,\n  \"rollNumber\": \"CS-2023-045\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Instructor / Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prof. Asim Ahmed\",\n  \"email\": \"asim.instructor@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"instructor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ali.khan@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update User Details",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ali Khan Updated\",\n  \"phone\": \"+92 300 1234567\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/updatedetails",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "updatedetails"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Students",
+      "item": [
+        {
+          "name": "Get All Students (Admin/Instructor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students"]
+            }
+          }
+        },
+        {
+          "name": "Get My Student Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update My Student Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cgpa\": 3.75,\n  \"bio\": \"Passionate MERN stack developer and competitive programmer\",\n  \"socialProfiles\": {\n    \"github\": \"https://github.com/alikhan\",\n    \"linkedin\": \"https://linkedin.com/in/alikhan\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/students/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Get Student Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "{{studentId}}", "dashboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Skills",
+      "item": [
+        {
+          "name": "Get All Skills Catalog",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "skills"]
+            }
+          }
+        },
+        {
+          "name": "Get Skill Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/skills/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "skills", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Create Skill (Admin/Instructor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Node.js\",\n  \"category\": \"Backend\",\n  \"subcategory\": \"Runtime & APIs\",\n  \"description\": \"JavaScript runtime built on Chrome's V8 engine\",\n  \"industryDemandScore\": 90,\n  \"tags\": [\"node\", \"backend\", \"express\", \"javascript\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "skills"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Student Skills (Acquired)",
+      "item": [
+        {
+          "name": "Get My Acquired Skills",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/student-skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "student-skills"]
+            }
+          }
+        },
+        {
+          "name": "Add Skill To My Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skillId\": \"<PASTE_SKILL_ID>\",\n  \"selfAssessedLevel\": \"intermediate\",\n  \"scorePercentage\": 65\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/student-skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "student-skills"]
+            }
+          }
+        },
+        {
+          "name": "Endorse Student Skill (Mentor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Strong problem-solving and clean code demonstrated in project\",\n  \"verifiedLevel\": \"advanced\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/student-skills/{{studentSkillId}}/endorse",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "student-skills", "{{studentSkillId}}", "endorse"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Job Roles (Career Benchmarks)",
+      "item": [
+        {
+          "name": "Get All Job Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/job-roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "job-roles"]
+            }
+          }
+        },
+        {
+          "name": "Create Job Role Benchmark (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Full Stack Developer\",\n  \"category\": \"Software Development\",\n  \"experienceLevel\": \"entry_level\",\n  \"description\": \"Builds full stack responsive web applications\",\n  \"marketInsights\": {\n    \"averageSalaryMin\": 55000,\n    \"averageSalaryMax\": 90000,\n    \"demandLevel\": \"very_high\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/job-roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "job-roles"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Skill Gap Analysis",
+      "item": [
+        {
+          "name": "Generate Skill Gap Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetRoleId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/analysis/generate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analysis", "generate"]
+            }
+          }
+        },
+        {
+          "name": "Get Latest Analysis Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analysis/latest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analysis", "latest"]
+            }
+          }
+        },
+        {
+          "name": "Get Analysis History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/analysis/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analysis", "history"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Assessments & Quizzes",
+      "item": [
+        {
+          "name": "Get All Assessments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/assessments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "assessments"]
+            }
+          }
+        },
+        {
+          "name": "Create Assessment (Instructor/Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"JavaScript ES6 Basics Quiz\",\n  \"category\": \"Frontend\",\n  \"targetSkill\": \"<PASTE_SKILL_ID>\",\n  \"difficultyLevel\": \"beginner\",\n  \"durationMinutes\": 20,\n  \"passingPercentage\": 60,\n  \"questions\": [\n    {\n      \"questionText\": \"Which keyword declares a block-scoped variable in modern JS?\",\n      \"questionType\": \"multiple_choice\",\n      \"options\": [\n        { \"optionId\": \"opt_1\", \"text\": \"var\", \"isCorrect\": false },\n        { \"optionId\": \"opt_2\", \"text\": \"let\", \"isCorrect\": true },\n        { \"optionId\": \"opt_3\", \"text\": \"global\", \"isCorrect\": false }\n      ],\n      \"correctAnswerExplanation\": \"let and const are block-scoped declarations in ES6\",\n      \"points\": 10\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/assessments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "assessments"]
+            }
+          }
+        },
+        {
+          "name": "Submit Assessment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeTakenMinutes\": 10,\n  \"answers\": [\n    {\n      \"questionId\": \"<QUESTION_ID>\",\n      \"selectedOptionId\": \"opt_2\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/assessments/{{assessmentId}}/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "assessments", "{{assessmentId}}", "submit"]
+            }
+          }
+        },
+        {
+          "name": "Get My Test Submissions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/assessments/submissions/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "assessments", "submissions", "my"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Learning Resources",
+      "item": [
+        {
+          "name": "Get Learning Resources",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/resources",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "resources"]
+            }
+          }
+        },
+        {
+          "name": "Create Resource (Admin/Instructor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Full Stack Open Course\",\n  \"url\": \"https://fullstackopen.com\",\n  \"provider\": \"freeCodeCamp\",\n  \"skill\": \"<PASTE_SKILL_ID>\",\n  \"targetLevel\": \"beginner\",\n  \"resourceType\": \"course\",\n  \"durationHours\": 40,\n  \"isFree\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/resources",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "resources"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Learning Paths (Roadmaps)",
+      "item": [
+        {
+          "name": "Get Learning Paths",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/learning-paths",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "learning-paths"]
+            }
+          }
+        },
+        {
+          "name": "Enroll in Learning Path",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/learning-paths/{{pathId}}/enroll",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "learning-paths", "{{pathId}}", "enroll"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Portfolio Projects",
+      "item": [
+        {
+          "name": "Get My Projects",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/projects/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects", "my"]
+            }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"E-Commerce Web Application\",\n  \"description\": \"Full stack online store with cart, payments and auth\",\n  \"category\": \"Web Development\",\n  \"githubUrl\": \"https://github.com/example/ecommerce\",\n  \"technologies\": [\"React\", \"Node.js\", \"MongoDB\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "projects"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Certificates & Badges",
+      "item": [
+        {
+          "name": "Get My Certificates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/certificates",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "certificates"]
+            }
+          }
+        },
+        {
+          "name": "Verify Credential (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/certificates/verify/{{credentialId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "certificates", "verify", "{{credentialId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Mentor Feedback",
+      "item": [
+        {
+          "name": "Get My Feedback",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "feedback"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Notifications",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Mark All As Read",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "read-all"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
